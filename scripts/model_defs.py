@@ -85,5 +85,37 @@ MODELS = {
         "port": 8014,
         "est_ram": "2 GB",
         "params": "3B"
+    },
+    # Vision Models (VLMs) - Experimental vLLM support
+    "llava-1.5-7b": {
+        "repo_id": "mlx-community/llava-1.5-7b-4bit",
+        "port": 8015,
+        "est_ram": "4 GB",
+        "params": "7B"
+    },
+    "llava-qwen-0.5b": {
+        "repo_id": "mlx-community/llava-interleave-qwen-0.5b-4bit",
+        "port": 8016,
+        "est_ram": "300 MB",
+        "params": "0.5B"
+    },
+    # Math & Reasoning Models
+    "qwq-32b": {
+        "repo_id": "mlx-community/QwQ-32B-Preview-4bit",
+        "port": 8017,
+        "est_ram": "17 GB",
+        "params": "32B"
+    },
+    "qwen-math-1.5b": {
+        "repo_id": "mlx-community/Qwen2.5-Math-1.5B-Instruct-4bit",
+        "port": 8018,
+        "est_ram": "1 GB",
+        "params": "1.5B"
+    },
+    "deepseek-r1-1.5b": {
+        "repo_id": "mlx-community/DeepSeek-R1-Distill-Qwen-1.5B-4bit",
+        "port": 8019,
+        "est_ram": "1 GB",
+        "params": "1.5B"
     }
 }

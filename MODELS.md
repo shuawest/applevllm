@@ -24,6 +24,22 @@ These models are pre-quantized (4-bit) to fit within the Unified Memory of a 36G
 | `starcoder2` | 8007 | `mlx-community/starcoder2-15b-4bit` | **~9 GB** | 💻 Code | 16k | Code completion specialist. Fast and lightweight. |
 | `phi-4` | 8008 | `mlx-community/phi-4-4bit` | **~9 GB** | 🧠 Logic | 16k | Microsoft's reasoning model. Exceptionally smart for <15B. |
 | `qwen-2.5` | 8009 | `mlx-community/Qwen2.5-32B-Instruct-4bit` | **~18 GB** | 🧠 Logic | 128k | Strong math and logic capabilities. |
+| `llava-1.5-7b`| 8015 | `mlx-community/llava-1.5-7b-4bit` | **~4 GB** | 🖼️ Vision | 4k | Vision-language model. Image understanding. ⚠️ Experimental |
+| `llava-qwen-0.5b`| 8016 | `mlx-community/llava-interleave-qwen-0.5b-4bit` | **~300 MB** | 🖼️ Vision | 32k | Tiny vision model for testing. ⚠️ Experimental |
+| `qwq-32b` | 8017 | `mlx-community/QwQ-32B-Preview-4bit` | **~17 GB** | 🧮 Math | 32k | Advanced reasoning and math specialist. |
+| `qwen-math-1.5b`| 8018 | `mlx-community/Qwen2.5-Math-1.5B-Instruct-4bit` | **~1 GB** | 🧮 Math | 32k | Compact math solver. |
+| `deepseek-r1-1.5b`| 8019 | `mlx-community/DeepSeek-R1-Distill-Qwen-1.5B-4bit` | **~1 GB** | 🧠 Reasoning | 32k | Distilled reasoning model. |
+
+## Categories
+
+- **⚡ Tiny** (135M-500M params): Ultra-fast, minimal RAM, great for simple tasks
+- **🚀 Small** (1B-3B params): Balanced speed and capability for everyday use
+- **💬 Chat** (27B-35B params): Large general-purpose conversational models
+- **💻 Code** (15B-34B params): Programming, code generation, technical tasks
+- **🧠 Logic/Reasoning** (14B-32B params): Math, reasoning, complex problem-solving
+- **🖼️ Vision** (0.5B-7B params): Image understanding (⚠️ Experimental vLLM support)
+- **🧮 Math** (1.5B-32B params): Mathematical reasoning and problem solving
+- **🔀 Router** (Port 8000): Federates all models via OpenAI API
 
 ## Notes on Memory
 *   **Est. Memory**: Approximate RAM usage for the model weights + minimal KV cache.
