@@ -1,144 +1,161 @@
-# vLLM on Apple Silicon Automation
+# vLLM on Apple Silicon
 
-This project provides a robust, automated harness to run [vLLM](https://github.com/vllm-project/vllm) on Apple Silicon (M1/M2/M3) devices using the [vllm-metal](https://github.com/vllm-project/vllm-metal) plugin.
+Production-ready system for running multiple vLLM models on Apple Silicon with automatic service management and OpenAI-compatible routing.
 
-## Prerequisites
-- macOS on Apple Silicon (arm64)
-- Internet connection (for downloading wheels and models)
-- `curl`
+## Features
+
+- 🚀 **Federated Router**: Single OpenAI-compatible endpoint (`localhost:8000`) for all models
+- 📊 **Dynamic Model Discovery**: `/v1/models` endpoint aggregates metadata from running services
+- 🔧 **Service Management**: macOS Launch Agents for background model services
+- 💻 **Apple Silicon Optimized**: Uses MLX 4-bit quantized models for efficiency
+- 🎯 **Simple CLI**:`./vllm-ctl` for all model operations
 
 ## Quick Start
 
-1.  **Setup Environment**
-    ```bash
-    make setup
-    ```
-    This will:
-    - Check your environment.
-    - Install `uv` (fast Python package manager) if missing.
-    - Create a virtual environment (`.venv`).
-    - Build/Install vLLM base and the `vllm-metal` plugin.
-
-2.  **Download a Model**
-    ```bash
-    make download-model MODEL=facebook/opt-125m
-    ```
-    *Defaults to `facebook/opt-125m`. You can specify any HF model.*
-
-3.  **Run vLLM**
-    ```bash
-    make run MODEL=facebook/opt-125m
-    ```
-    The server will start at `http://localhost:8000`.
-
-4.  **Test Installation**
-    ```bash
-    make test
-    ```
-
-## Models Guide (Mac Metal)
-**Status**: 
-- ✅ **Standard (Float16)**: Works great.
-- ⚠️ **Quantized (AWQ)**: Currently unstable/broken on `vllm-metal` 0.1.0. **Avoid AWQ models for now.**
-
-**Recommended Models (for 9-10GB available RAM):**
-- **Tiny**: `HuggingFaceTB/SmolLM2-135M-Instruct`
-- **Small**: `Qwen/Qwen2.5-1.5B-Instruct`
-- **Medium**: `Qwen/Qwen2.5-3B-Instruct` (~6GB VRAM, should fit)
-
-> [!WARNING]
-> Larger models (7B, 14B, 32B) require significantly more RAM (14GB+ for 7B FP16). To run them, you must free up system memory or wait for working 4-bit quantization support.
-
+### 1. Setup Environment
 ```bash
-make run MODEL=Qwen/Qwen2.5-3B-Instruct
+make setup
 ```
+This installs `uv`, creates `.venv`, and installs vLLM with `vllm-metal` plugin.
 
-## High RAM Models (Reboot Required)
-If you reboot and have **25GB+ free RAM** (out of 36GB), you can try these standard (non-quantized) models. AWQ is avoided due to current instability.
-
-- **DeepSeek R1 Distill 7B**: `deepseek-ai/DeepSeek-R1-Distill-Qwen-7B` (~15GB VRAM)
-- **Qwen 2.5 7B**: `Qwen/Qwen2.5-7B-Instruct` (~15GB VRAM)
-- **Qwen 2.5 14B**: `Qwen/Qwen2.5-14B-Instruct` (~29GB VRAM - **Very Tight**)
-
-```bash
-# Recommended for 36GB Mac
-make run MODEL=Qwen/Qwen2.5-7B-Instruct
-
-# Experimental (May OOM if OS uses >6GB)
-make run MODEL=Qwen/Qwen2.5-14B-Instruct
-```
-
-## Experimental Quantization
-We are testing support for specific quantization formats. Currently, pre-quantized MLX models (via `mlx-community`) are the recommended approach.
-
-```bash
-# Test MLX 4-bit Quantization (Qwen 1.5B)
-make test-mlx
-```
-
-## Customization
-- **Makefile**: Variables like `VENV_DIR`, `MODEL`, and `HF_CACHE` can be overridden.
-- **scripts/setup_env.sh**: Contains the core installation logic.
-
-## Service Management (LaunchAgents)
-You can run models as background services (LaunchAgents), allowing them to start/stop independently on dedicated ports.
-
-### Setup
+### 2. Install Services
 ```bash
 ./vllm-ctl install
 ```
+Generates LaunchAgent plists for all models and the router.
 
-### Usage
+### 3. Start the Router
 ```bash
-# Start a model (e.g., Command R on port 8001)
-./vllm-ctl start command-r
-
-# Start the Router (Port 8000)
 ./vllm-ctl start router
+```
+The federated router starts on http://localhost:8000
 
-# Check status of all models
+### 4. Start Models
+```bash
+# Start a tiny model (uses only ~500MB RAM)
+./vllm-ctl start smollm2-135m
+
+# Check what's running
+./vllm-ctl status
+```
+
+## Usage
+
+### Service Management
+```bash
+# View all models and their status
 ./vllm-ctl status
 
+# Start a specific model
+./vllm-ctl start llama-3.2-3b
+
 # Stop a model
-./vllm-ctl stop command-r
+./vllm-ctl stop llama-3.2-3b
+
+# Stop everything
+./vllm-ctl stop-all
 
 # View logs
-./vllm-ctl logs command-r
+./vllm-ctl logs smollm2-135m
+
+# Restart the router
+./vllm-ctl restart router
 ```
 
-### Shell Autocomplete
-To enable tab completion for commands and models:
+### Using the API
 ```bash
-source scripts/vllm-completion.bash
-```
-(Add this line to your `~/.zshrc` or `~/.bashrc` to make it permanent.)
+# List available models (only shows running ones)
+curl http://localhost:8000/v1/models
 
-### Available Services
-For a full list of models, ports, and memory requirements, see [MODELS.md](MODELS.md).
-
-| Model | Port | Type |
-| :--- | :--- | :--- |
-| `router` | 8000 | 🔀 OpenAI Router |
-| `command-r` | 8001 | 💬 Chat |
-| `yi-1.5` | 8002 | 💬 Chat |
-| ... and more (see [MODELS.md](MODELS.md)) | | |
-
-## OpenAI Router (Port 8000)
-A `router` service is available on port 8000. It is an OpenAI-compatible endpoint that federates all other models.
-- **Base URL**: `http://localhost:8000/v1`
-- **API Key**: `EMPTY`
-- **Model Usage**: You can request any model by its name (e.g., `model="phi-4"`) and the router will forward the request to the correct port.
-
-**Example**:
-```bash
+# Chat completion
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "phi-4",
-    "messages": [{"role": "user", "content": "Hello!"}]
+    "model": "smollm2-135m",
+    "messages": [{"role": "user", "content": "Hello!"}],
+    "max_tokens": 100
   }'
 ```
 
-## Notes
-- Docker is **not supported** for GPU acceleration on Mac Metal. This setup runs natively using a virtual environment.
-- Large models require significant RAM. M1/M2/M3 Max/Ultra chips are recommended for 7B+ models.
+### Shell Autocomplete
+Enable tab completion for commands and models:
+```bash
+source scripts/vllm-completion.bash
+```
+Add to your `~/.zshrc` to make it permanent.
+
+## Models
+
+See [MODELS.md](MODELS.md) for the complete list of supported models, ports, and memory requirements.
+
+### Model Categories
+- **⚡ Tiny** (100-400MB): SmolLM2-135M, Qwen-0.5B
+- **🚀 Small** (1-2GB): Qwen-1.5B, Llama-3.2-1B/3B
+- **💬 Chat** (14-26GB): Command-R, Yi-1.5, Gemma-2, Mixtral
+- **💻 Code** (10-19GB): Codestral, Yi-Coder, StarCoder2
+
+All models use MLX 4-bit quantization for optimal performance on Apple Silicon.
+
+## Architecture
+
+### Federated Router (Port 8000)
+- **Frontend**: `scripts/federated_router.py` (FastAPI)
+- **Backend**: LiteLLM (Port 8080)
+- **Dynamic `/v1/models`**: Queries all running vLLM services and aggregates metadata
+- **Transparent Proxying**: All other requests routed to LiteLLM
+
+### Individual Models (Ports 8001-8014)
+Each model runs as a separate vLLM server:
+- Managed by macOS LaunchAgents
+- Auto-downloads from HuggingFace on first start
+- Logs to `~/Library/Logs/vllm/`
+
+## Requirements
+
+- **macOS**: Apple Silicon (M1/M2/M3/M4)
+- **RAM**: Minimum 16GB (36GB recommended for large models)
+- **Internet**: For downloading models
+
+## Advanced
+
+### Makefile Targets
+```bash
+make help          # Show all available targets
+make setup         # Install dependencies
+make install       # Install LaunchAgent services
+make start         # Start router
+make stop          # Stop all services
+make status        # Show service status
+make test          # Run pytest tests
+make clean         # Remove virtual environment
+```
+
+### Development
+```bash
+# Run tests
+make test
+
+# Regenerate service plists
+.venv/bin/python scripts/generate_plists.py
+
+# Regenerate router config
+.venv/bin/python scripts/generate_router_config.py
+```
+
+## Troubleshooting
+
+### Models Won't Start
+Check logs: `./vllm-ctl logs <model-name>`
+
+### Port Conflicts
+Stop all services: `./vllm-ctl stop-all`
+
+### Memory Issues
+Start smaller models first (`smollm2-135m`, `qwen-0.5`) and check RAM with `./vllm-ctl status`
+
+## License
+
+See individual component licenses:
+- vLLM: Apache 2.0
+- LiteLLM: MIT
+- Models: See HuggingFace model cards

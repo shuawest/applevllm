@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment & Secrets
+.env
+.env.local
+*.key
+*.pem
+secrets/
+*.secret
+
+# Project Specific - Generated Files
+services/
+*.plist
+router_config.yaml
+
+# vLLM - Models & Cache
+models/
+*.safetensors
+*.gguf
+.cache/
+downloads/
+
+# Logs
+*.log
+logs/
+*.out
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
