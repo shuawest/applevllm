@@ -15,7 +15,6 @@ These models are pre-quantized (4-bit) to fit within the Unified Memory of a 36G
 | `qwen-1.5` | 8012 | `mlx-community/Qwen2.5-1.5B-Instruct-4bit` | **~1 GB** | 🚀 Small | 32k | Great balance of speed and smarts. |
 | `llama-3.2-1b`| 8013 | `mlx-community/Llama-3.2-1B-Instruct-4bit` | **~800 MB** | 🚀 Small | 128k | Llama 3.2 text-only edge model. |
 | `llama-3.2-3b`| 8014 | `mlx-community/Llama-3.2-3B-Instruct-4bit` | **~2 GB** | 🚀 Small | 128k | Strong edge model, instruction tuned. |
-| `command-r` | 8001 | `mlx-community/c4ai-command-r-v01-4bit` | **~19 GB** | 💬 Chat | 128k | Excellent for RAG and tool use. Strong reasoning. |
 | `yi-1.5` | 8002 | `mlx-community/Yi-1.5-34B-Chat-4bit` | **~19 GB** | 💬 Chat | 32k | Balanced, high-quality, creative chat model. |
 | `mixtral` | 8004 | `mlx-community/Mixtral-8x7B-Instruct-v0.1-4bit` | **~26 GB** | 💬 Chat | 32k | Mixture of Experts (MoE). High throughput, tight fit on 36GB. |
 | `codestral` | 8005 | `mlx-community/Codestral-22B-v0.1-4bit` | **~14 GB** | 💻 Code | 32k | Mistral's dedicated coding model. Python/SQL specialist. |

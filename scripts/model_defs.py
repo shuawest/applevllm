@@ -2,12 +2,6 @@
 # Shared between generate_plists.py and generate_router_config.py
 
 MODELS = {
-    "command-r": {
-        "repo_id": "mlx-community/c4ai-command-r-v01-4bit",
-        "port": 8001,
-        "est_ram": "19 GB",
-        "params": "35B"
-    },
     "yi-1.5": {
         "repo_id": "mlx-community/Yi-1.5-34B-Chat-4bit",
         "port": 8002,
