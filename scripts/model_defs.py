@@ -14,12 +14,6 @@ MODELS = {
         "est_ram": "19 GB",
         "params": "34B"
     },
-    "gemma-2": {
-        "repo_id": "mlx-community/gemma-2-27b-it-4bit",
-        "port": 8003,
-        "est_ram": "17 GB",
-        "params": "27B"
-    },
     "mixtral": {
         "repo_id": "mlx-community/Mixtral-8x7B-Instruct-v0.1-4bit",
         "port": 8004,
