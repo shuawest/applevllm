@@ -18,6 +18,7 @@ These models are pre-quantized (4-bit) to fit within the Unified Memory of a 36G
 | `yi-1.5` | 8002 | `mlx-community/Yi-1.5-34B-Chat-4bit` | **~19 GB** | 💬 Chat | 32k | Balanced, high-quality, creative chat model. |
 | `mixtral` | 8004 | `mlx-community/Mixtral-8x7B-Instruct-v0.1-4bit` | **~26 GB** | 💬 Chat | 32k | Mixture of Experts (MoE). High throughput, tight fit on 36GB. |
 | `codestral` | 8005 | `mlx-community/Codestral-22B-v0.1-4bit` | **~14 GB** | 💻 Code | 32k | Mistral's dedicated coding model. Python/SQL specialist. |
+| `yi-coder-9b` | 8006 | `k2rks/Yi-Coder-9B-Chat-mlx-4bit` | **~6 GB** | 💻 Code | 128k | Yi coding model. Strong at programming tasks. |
 | `starcoder2` | 8007 | `mlx-community/starcoder2-15b-4bit` | **~9 GB** | 💻 Code | 16k | Code completion specialist. Fast and lightweight. |
 | `phi-4` | 8008 | `mlx-community/phi-4-4bit` | **~9 GB** | 🧠 Logic | 16k | Microsoft's reasoning model. Exceptionally smart for <15B. |
 | `qwen-2.5` | 8009 | `mlx-community/Qwen2.5-32B-Instruct-4bit` | **~18 GB** | 🧠 Logic | 128k | Strong math and logic capabilities. |

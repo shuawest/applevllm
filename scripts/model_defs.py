@@ -20,6 +20,12 @@ MODELS = {
         "est_ram": "14 GB",
         "params": "22B"
     },
+    "yi-coder-9b": {
+        "repo_id": "k2rks/Yi-Coder-9B-Chat-mlx-4bit",
+        "port": 8006,
+        "est_ram": "6 GB",
+        "params": "9B"
+    },
     "starcoder2": {
         "repo_id": "mlx-community/starcoder2-15b-4bit",
         "port": 8007,
